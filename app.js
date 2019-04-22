@@ -13,7 +13,8 @@
             res.sendFile(__dirname+'/index.html'); 
             
             // app.get('path',function(request,response){}) --Structure of GET
-            //$ ./node_modules/.bin/nodemon server.js to run nodemon
+            // "$ ./node_modules/.bin/nodemon server.js" to run nodemon 
+            //to trigger nodemon "npm run dev"
 
 
         })
