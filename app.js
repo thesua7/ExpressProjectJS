@@ -18,3 +18,8 @@
 
 
         })
+
+        //creating a post
+        app.post('/quotes', (req, res) => {
+            console.log('Hellooooooooooooooooo!')
+          })
