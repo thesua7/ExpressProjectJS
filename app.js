@@ -1,6 +1,7 @@
         var express = require('express');
         var bodyParser = require('body-parser');
         var path = require('path');
+        var expressValidator = require('express-validator');
 
 
         var app = express();
@@ -29,12 +30,43 @@
          // Set static path
          app.use(express.static(path.join(__dirname,'public')));
          
-
+        var users = [
+            {
+                id: 1,
+                first_name: 'Nashita',
+                last_name: 'Behroz',
+                email: 'nb@gmail.com',
+            },
+            {
+                id: 2,
+                first_name: 'Nanzifa',
+                last_name: 'Nuzhat',
+                email: 'nn@gmail.com',
+            },
+            {
+                id: 3,
+                first_name: 'Sani',
+                last_name: 'Ahamed',
+                email: 'sa@gmail.com',
+            }
+        ]
 
         app.get('/',function(req,res){
-            res.render('index');
+            var title = 'Customers';
+            res.render('index',{
+                title: 'Customers', //passing variable to view
+                users: users //passing an array variable
+            });
         })
 
+        app.post('/users/add',function(req,res){
+            var newUser = {
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                email: req.body.email
+            }
+            console.log(newUser);
+        })
 
         app.listen(3000,function(){
             console.log('Server started');
