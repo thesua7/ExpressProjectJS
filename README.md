@@ -1,6 +1,6 @@
 # ExpressProjectJS
 
-Simple To Do List Web application and also login system
+Simple login system
 
 Create-read-update-delete Application with Express and MongoDB
 
