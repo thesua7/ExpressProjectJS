@@ -29,6 +29,23 @@
 
          // Set static path
          app.use(express.static(path.join(__dirname,'public')));
+
+         app.use(expressValidator({
+            errorFormatter: function(param, msg, value) {
+                var namespace = param.split('.')
+                , root    = namespace.shift()
+                , formParam = root;
+          
+              while(namespace.length) {
+                formParam += '[' + namespace.shift() + ']';
+              }
+              return {
+                param : formParam,
+                msg   : msg,
+                value : value
+              };
+            }
+          }));
          
         var users = [
             {
@@ -60,12 +77,34 @@
         })
 
         app.post('/users/add',function(req,res){
-            var newUser = {
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                email: req.body.email
+
+            req.checkBody('first_name','First Name is Required').notEmpty();
+            req.checkBody('last_name','Last Name is Required').notEmpty();
+            req.checkBody('email','Email is Required').notEmpty();
+            
+            var errors = req.validationErrors();
+
+            if(errors){
+                
+                    res.render('index',{
+                    title: 'Customers', //passing variable to view
+                    users: users, //passing an array variable
+                    errors: errors
+                });
             }
-            console.log(newUser);
+            
+            else {
+                var newUser = {
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    email: req.body.email
+                }
+
+                console.log('Success');
+            }
+
+       
+            
         })
 
         app.listen(3000,function(){
