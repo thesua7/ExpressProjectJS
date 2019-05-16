@@ -5,6 +5,7 @@
         var expressValidator = require('express-validator');
         var mongojs = require('mongojs')
         var db = mongojs('customerapp', ['users'])
+        var passwordHash = require('password-hash');
 
         var ObjectId = mongojs.ObjectID;
 
@@ -82,6 +83,7 @@
             req.checkBody('first_name','First Name is Required').notEmpty();
             req.checkBody('last_name','Last Name is Required').notEmpty();
             req.checkBody('email','Email is Required').notEmpty();
+            req.checkBody('password','Password is Required').notEmpty();
             
             var errors = req.validationErrors();
 
@@ -95,10 +97,15 @@
             }
             
             else {
+
+                var hashedPassword = passwordHash.generate(req.body.password);
+                
+
                 var newUser = {
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
-                    email: req.body.email
+                    email: req.body.email,
+                    password:hashedPassword
                 }
 
                 db.users.insert(newUser,function(err,result){
@@ -115,6 +122,32 @@
             
         });
 
+
+
+        app.post('/users/login',function(req,res){
+        
+            db.users.find(function(err,docs){
+                docs.forEach(function(u){
+                    if(u.email==req.body.email){
+                       console.log(u.email);
+    
+                        
+                    }
+                });
+            })
+ 
+        
+
+
+
+        })
+
+        app.post('/home',function(req,res){
+
+            res.render('home');
+
+        });
+
         app.delete('/users/delete/:id',function(req,res){
             // console.log(req.params.id);
             db.users.remove({_id: ObjectId(req.params.id)},function(err,result){
@@ -124,6 +157,7 @@
                 res.redirect('/');
             });
         });
+
 
         app.listen(3000,function(){
             console.log('Server started');

@@ -16,10 +16,33 @@
         <br>
         <label>Email</label><br>
         <input type="text" name="email">
+        <br>
+        <label>Password</label><br>
+        <input type="password" name="password">
         <br><br>
         <input type="submit" value="submit">
         
     </form>
+
+
+    <h1>Login Customer</h1>
+    <form method="POST" action="/users/login">
+     
+      <label>Email</label><br>
+      <input type="text" name="email">
+      <br>
+      <label>Password</label><br>
+      <input type="password" name="password">
+      <br><br>
+      <input type="submit" value="submit">
+      
+  </form>
+
+
+
+
+
+
 
         <h1><%=title%> </h1>
         <ul>
@@ -28,6 +51,9 @@
           - <a href="#" class="deleteuser" data-id="<%= u._id %>">Delete</a></li>
         <% }) %>
         </ul>
+         
+        
+         
     <% include Partials/footer %>
 
 
