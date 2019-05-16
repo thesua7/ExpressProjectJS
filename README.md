@@ -8,3 +8,7 @@ Sources:
 https://zellwk.com/blog/crud-express-mongodb/
 
 https://github.com/VojtaStavik/GetBack2Work-Node/tree/master/node_modules/express-validator
+
+https://github.com/mafintosh/mongojs
+
+https://code.jquery.com/
