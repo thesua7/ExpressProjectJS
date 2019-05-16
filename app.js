@@ -1,8 +1,12 @@
+
         var express = require('express');
         var bodyParser = require('body-parser');
         var path = require('path');
         var expressValidator = require('express-validator');
+        var mongojs = require('mongojs')
+        var db = mongojs('customerapp', ['users'])
 
+        var ObjectId = mongojs.ObjectID;
 
         var app = express();
            
@@ -30,6 +34,15 @@
          // Set static path
          app.use(express.static(path.join(__dirname,'public')));
 
+         //Global variable
+         app.use(function(req,res,next){
+
+            res.locals.errors = null;
+            next();
+
+         });
+
+
          app.use(expressValidator({
             errorFormatter: function(param, msg, value) {
                 var namespace = param.split('.')
@@ -47,33 +60,21 @@
             }
           }));
          
-        var users = [
-            {
-                id: 1,
-                first_name: 'Nashita',
-                last_name: 'Behroz',
-                email: 'nb@gmail.com',
-            },
-            {
-                id: 2,
-                first_name: 'Nanzifa',
-                last_name: 'Nuzhat',
-                email: 'nn@gmail.com',
-            },
-            {
-                id: 3,
-                first_name: 'Sani',
-                last_name: 'Ahamed',
-                email: 'sa@gmail.com',
-            }
-        ]
+      
 
         app.get('/',function(req,res){
+ 
+          // find everything
+            db.users.find(function (err, docs) {
+                
+                res.render('index',{
+                    title: 'Customers', //passing variable to view
+                    users: docs //passing an array variable
+                });
+            })
+
             var title = 'Customers';
-            res.render('index',{
-                title: 'Customers', //passing variable to view
-                users: users //passing an array variable
-            });
+     
         })
 
         app.post('/users/add',function(req,res){
@@ -100,12 +101,29 @@
                     email: req.body.email
                 }
 
-                console.log('Success');
+                db.users.insert(newUser,function(err,result){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    res.redirect('/');
+
+                });
             }
 
        
             
-        })
+        });
+
+        app.delete('/users/delete/:id',function(req,res){
+            // console.log(req.params.id);
+            db.users.remove({_id: ObjectId(req.params.id)},function(err,result){
+                if(err){
+                    console.log(err);
+                }
+                res.redirect('/');
+            });
+        });
 
         app.listen(3000,function(){
             console.log('Server started');
@@ -113,6 +131,34 @@
 
 
 
+
+
+
+
+
+          
+
+        // array variable
+        // var users = [
+        //     {
+        //         id: 1,
+        //         first_name: 'Nashita',
+        //         last_name: 'Behroz',
+        //         email: 'nb@gmail.com',
+        //     },
+        //     {
+        //         id: 2,
+        //         first_name: 'Nanzifa',
+        //         last_name: 'Nuzhat',
+        //         email: 'nn@gmail.com',
+        //     },
+        //     {
+        //         id: 3,
+        //         first_name: 'Sani',
+        //         last_name: 'Ahamed',
+        //         email: 'sa@gmail.com',
+        //     }
+        // ]
 
 
         

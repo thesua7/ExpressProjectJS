@@ -5,8 +5,8 @@
         <% errors.forEach(function(error){ %>
             <li><%= error.msg %> </li>
           <% }) %>
-        </ul>  
-    <% } %>
+        </ul>  <% }  %>
+
     <form method="POST" action="/users/add">
         <label>First Name</label><br>
         <input type="text" name="first_name">
@@ -24,7 +24,8 @@
         <h1><%=title%> </h1>
         <ul>
         <% users.forEach(function(u){ %>
-          <li><%= u.first_name %> <%= u.last_name %></li>
+          <li><%= u.first_name %> <%= u.last_name %>
+          - <a href="#" class="deleteuser" data-id="<%= u._id %>">Delete</a></li>
         <% }) %>
         </ul>
     <% include Partials/footer %>
