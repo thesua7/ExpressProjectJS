@@ -121,19 +121,38 @@
        
             
         });
-
-
+        
 
         app.post('/users/login',function(req,res){
-        
+
+            var cheak =0;
+            var umail=null
+
             db.users.find(function(err,docs){
                 docs.forEach(function(u){
-                    if(u.email==req.body.email){
-                       console.log(u.email);
+
+                    if(passwordHash.verify(req.body.password, u.password)){ //Password verifying using hashing 
+                        //console.log(u.email);
+                        cheak = 1;
+                        umail = u.email;
+                      
+
+                    }
+
+
+                    // if(u.email==req.body.email){
+                    //    console.log(u.email);
     
                         
-                    }
+                    // }
                 });
+
+                if(cheak==1){
+                    console.log(umail);
+                }
+                else{
+                    console.log("Wrong Password");
+                }
             })
  
         
