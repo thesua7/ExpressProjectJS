@@ -6,6 +6,7 @@
         var mongojs = require('mongojs')
         var db = mongojs('customerapp', ['users'])
         var passwordHash = require('password-hash');
+        var session = require('express-session')
 
         var ObjectId = mongojs.ObjectID;
 
@@ -34,6 +35,16 @@
 
          // Set static path
          app.use(express.static(path.join(__dirname,'public')));
+
+         //session 
+         app.use(session({
+            secret: 'sua7',
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                maxAge: 60 * 1000 * 30
+             }
+          }))
 
          //Global variable
          app.use(function(req,res,next){
@@ -148,7 +159,9 @@
                 });
 
                 if(cheak==1){
+                    req.session.email = umail;
                     console.log(umail);
+                    res.redirect('/home');
                 }
                 else{
                     console.log("Wrong Password");
@@ -162,8 +175,11 @@
         })
 
         app.get('/home',function(req,res){
+            var s = req.session.email;
 
-            res.render('home');
+            res.render('home',{
+                  email:s
+            });
 
         });
 
